@@ -1,39 +1,39 @@
-mydata = read.csv('./spaeth_01.csv', sep = ',')
-plot(mydata)
+# mydata = read.csv('./spaeth_01.csv', sep = ',')
+# plot(mydata)
 
-seed = read.csv('seeds_dataset.csv')
+seed = read.csv('seeds_dataset.csv', sep = ',')
 plot(seed)
-realseed = read.csv('seeds_real.csv')
+realseed = read.csv('seeds_real.csv', sep = ',')
 plot(realseed)
 
 
 # optional: Prepare Data
-mydata = na.omit(mydata) # deletion of missing data
-mydata = scale(mydata) # standardize variables
+seed = na.omit(seed) # deletion of missing data
+seed = scale(seed) # standardize variables
 
 
 # HC
 
-d <- dist(mydata, method = "euclidean") # generate distance matrix between datapoints
+d <- dist(seed, method = "euclidean") # generate distance matrix between datapoints
 
 fit <- hclust(d, method="average") # perform clustering (s, a, c)
 plot(fit) # display dendogram
 
-Hgroups <- cutree(fit, k=5) # cut tree into 5 clusters
+Hgroups <- cutree(fit, k=3) # cut tree into 3 clusters
 
-rect.hclust(fit, k=5, border="red") # draw the dendrogram with red borders around these 5 clusters
-plot(mydata, col=Hgroups) # draw a scatterplot with the assigned clusters as colours
+rect.hclust(fit, k=5, border="red") # draw the dendrogram with red borders around these 3 clusters
+plot(seed, col=Hgroups) # draw a scatterplot with the assigned clusters as colours
 
 
 # KC
 
-fit <- kmeans(mydata, 5) # 5 clusters solution (k=5)
+fit <- kmeans(seed, 5) # 3 clusters solution (k=3)
 
-aggregate(mydata,by=list(fit$cluster),FUN=mean) # calculate mean value for each variable 
+aggregate(seed,by=list(fit$cluster),FUN=mean) # calculate mean value for each variable 
 
 Kgroups = fit$cluster # split cluster assignments
 
-plot(mydata, col=Kgroups)
+plot(seed, col=Kgroups)
 
 
 
@@ -42,3 +42,8 @@ plot(mydata, col=Kgroups)
 source("./WK_R.r")
 
 wk = WK_R(Kgroups, Hgroups)
+
+fitreal_k <- kmeans(realseed, 3) # 3 clusters
+realGroup = fitreal_k$cluster
+
+wkKCReal = WK_R(Kgroups, realGroup)
