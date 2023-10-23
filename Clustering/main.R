@@ -96,7 +96,7 @@ plot(seed, col=Kgroups_5, main="K-Means scatterplot for 5 clusters")
 
 # get clusters from solution dataset to compare with KMeans and HC using weighted kappa
 fitreal_k <- kmeans(realseed, 3) 
-real_group = fitreal_k$cluster
+real_group = realseed[,1]
 
 
 # get kappa of other linkage methods and also random values of k for k means
